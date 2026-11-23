@@ -135,7 +135,7 @@ Markdown (`.md`, `.markdown`) and Jupyter notebooks (`.ipynb`), plus:
 - Korn Shell (`.ksh`)
 - TCSH (`.tcsh`)
 - Z Shell (`.zsh`)
-- Executable scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line (Perl, Python, shell, Ruby and others)
+- Scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line (Perl, Python, shell, Ruby and others); other text files without an extension show as plain text
 
 ### Assembly
 

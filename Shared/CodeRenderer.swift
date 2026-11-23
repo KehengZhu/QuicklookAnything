@@ -436,8 +436,9 @@ final internal class CodeRenderer {
         // LOCAL: `Makefile`, `GNUmakefile` and `Makefile.def`-style names, whatever
         // their extension makes of them (`.def` is typed as TeX)
         if sourceFileName.hasPrefix("makefile") || sourceFileName.hasPrefix("gnumakefile") { return "makefile" }
-        // LOCAL: extensionless scripts such as `gitclone` take the language of their `#!` line
-        if sourceFileUTI == "public.unix-executable" { return shebangLanguage(sourceFilePath) ?? "plaintext" }
+        // LOCAL: files without an extension, such as the script `gitclone`, take the
+        // language of their `#!` line, or show as plain text
+        if sourceFileUTI == "public.unix-executable" || sourceFileUTI == "public.data" { return shebangLanguage(sourceFilePath) ?? "plaintext" }
         // LOCAL: IDL `.pro` files
         if sourceFileUTI.hasSuffix(".idl-source") { return "idl" }
 
@@ -602,19 +603,21 @@ final internal class CodeRenderer {
 
 
     /**
-     LOCAL: Whether a file is a compiled executable rather than a script.
+     LOCAL: Whether a file without an extension holds binary data rather than text.
 
-     Scripts without an extension are typed `public.unix-executable`, like compiled
-     programs. Only a file that starts with `#!` is shown as code; for anything else
-     the extensions report an error, so Quick Look and Finder fall back to their
-     own preview and icon.
+     Files without an extension are typed `public.unix-executable` if executable and
+     `public.data` if not, whether they are scripts, text or compiled programs and data.
+     A file with a NUL byte in its first 8 KB is binary: for it the extensions report an
+     error, so Quick Look and Finder fall back to their own preview and icon.
      */
-    static func isBinaryExecutable(_ url: URL) -> Bool {
+    static func isBinaryFile(_ url: URL) -> Bool {
 
-        guard (try? url.resourceValues(forKeys: [.contentTypeKey]).contentType?.identifier) == "public.unix-executable" else { return false }
+        let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType?.identifier
+        guard type == "public.unix-executable" || type == "public.data" else { return false }
         guard let handle = try? FileHandle(forReadingFrom: url) else { return true }
         defer { try? handle.close() }
-        return (try? handle.read(upToCount: 2)) != Data("#!".utf8)
+        guard let head = try? handle.read(upToCount: 8192) else { return false }
+        return head.contains(0)
     }
 
 

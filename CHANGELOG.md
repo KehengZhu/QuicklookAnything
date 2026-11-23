@@ -2,7 +2,7 @@
 
 - 1.3.0 *23 November 2026*
     - Preview IDL `.pro` files, with highlighting for IDL syntax.
-    - Preview executable scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line; compiled programs keep the system preview.
+    - Preview scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line, and other text files without an extension as plain text; binary files keep the system preview.
     - Highlight `Makefile.def` and other `Makefile.*` files as Makefiles.
 - 1.2.1 *19 November 2026*
     - The theme icons on the Code tab and the previews in the theme list show each theme's colors; they were empty.

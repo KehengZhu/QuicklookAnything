@@ -34,8 +34,8 @@ class ThumbnailProvider: QLThumbnailProvider {
          * This is the main entry point for macOS' thumbnailing system
          */
 
-        // LOCAL: leave compiled programs to Finder's own icon
-        if CodeRenderer.isBinaryExecutable(request.fileURL) {
+        // LOCAL: leave binary files without an extension to Finder's own icon
+        if CodeRenderer.isBinaryFile(request.fileURL) {
             handler(nil, ThumbnailerError.badFileUnsupportedFile(request.fileURL.path))
             return
         }

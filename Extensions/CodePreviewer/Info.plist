@@ -55,6 +55,7 @@
 				<string>public.nasm-assembly-source</string>
 				<string>public.make-source</string>
 				<string>public.unix-executable</string>
+				<string>public.data</string>
 				<string>io.github.kehengzhu.idl-source</string>
 				<string>public.toml</string>
 				<string>com.apple.applescript.text</string>
