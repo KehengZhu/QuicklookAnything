@@ -1,1 +1,3 @@
 Vendored from smittytone/HighlighterSwift @ 958f30c (develop), MIT license. Local changes are marked LOCAL.
+Sources/Assets/highlight.min.js is tools/mklazy.js's output with tools/idl.js (an IDL grammar) appended:
+  node tools/mklazy.js highlight.full.min.js lazy.js && cat lazy.js tools/idl.js > Sources/Assets/highlight.min.js

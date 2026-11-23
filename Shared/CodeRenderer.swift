@@ -431,6 +431,15 @@ final internal class CodeRenderer {
         // FROM 1.2.2 -- make sure these are lowercase
         let sourceFileUTI = getSourceFileUTI(sourceFilePath).lowercased()
         let sourceFileExtension = (sourceFilePath as NSString).pathExtension.lowercased()
+        let sourceFileName = (sourceFilePath as NSString).lastPathComponent.lowercased()
+
+        // LOCAL: `Makefile`, `GNUmakefile` and `Makefile.def`-style names, whatever
+        // their extension makes of them (`.def` is typed as TeX)
+        if sourceFileName.hasPrefix("makefile") || sourceFileName.hasPrefix("gnumakefile") { return "makefile" }
+        // LOCAL: extensionless scripts such as `gitclone` take the language of their `#!` line
+        if sourceFileUTI == "public.unix-executable" { return shebangLanguage(sourceFilePath) ?? "plaintext" }
+        // LOCAL: IDL `.pro` files
+        if sourceFileUTI.hasSuffix(".idl-source") { return "idl" }
 
         // Trap 'non-standard' UTIs
         if sourceFileUTI.hasPrefix("com.apple.applescript") { return "applescript" }
@@ -545,6 +554,67 @@ final internal class CodeRenderer {
               let head = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1) else { return false }
         return head.range(of: #"(?m)^\s*(#\s*(import|include)\b|@(interface|implementation|protocol|import)\b)"#,
                           options: .regularExpression) != nil
+    }
+
+
+    /**
+     LOCAL: The Highlight.js language named by a script's `#!` line, eg. `perl` for
+     `#!/usr/bin/perl -s` or `python` for `#!/usr/bin/env -S python3 -u`.
+
+     - Returns: The language, or `nil` if the file has no `#!` line or names an unknown interpreter.
+     */
+    private func shebangLanguage(_ path: String) -> String? {
+
+        guard let handle = FileHandle(forReadingAtPath: path) else { return nil }
+        defer { try? handle.close() }
+        guard let data = try? handle.read(upToCount: 256),
+              let head = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1),
+              head.hasPrefix("#!") else { return nil }
+
+        var words = head.dropFirst(2).prefix { $0 != "\n" && $0 != "\r" }
+            .split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+        // `#!/usr/bin/env [-S] python3`: the interpreter is the first word that is not an option
+        if let first = words.first, (first as NSString).lastPathComponent == "env" {
+            words = Array(words.dropFirst().drop { $0.hasPrefix("-") || $0.contains("=") })
+        }
+        guard let interpreter = words.first.map({ ($0 as NSString).lastPathComponent.lowercased() }) else { return nil }
+
+        // Drop a version number: `python3.12` -> `python`, `perl5` -> `perl`
+        let name = String(interpreter.prefix { !$0.isNumber && $0 != "." && $0 != "-" })
+        switch name {
+            case "sh", "bash", "zsh", "ksh", "csh", "tcsh", "dash", "fish": return "bash"
+            case "perl": return "perl"
+            case "python", "pypy": return "python"
+            case "ruby": return "ruby"
+            case "node", "deno", "bun": return "javascript"
+            case "php": return "php"
+            case "lua": return "lua"
+            case "tclsh", "wish", "expect": return "tcl"
+            case "awk", "gawk", "nawk", "mawk": return "awk"
+            case "julia": return "julia"
+            case "rscript": return "r"
+            case "osascript": return "applescript"
+            case "make", "gmake": return "makefile"
+            case "swift": return "swift"
+            default: return nil
+        }
+    }
+
+
+    /**
+     LOCAL: Whether a file is a compiled executable rather than a script.
+
+     Scripts without an extension are typed `public.unix-executable`, like compiled
+     programs. Only a file that starts with `#!` is shown as code; for anything else
+     the extensions report an error, so Quick Look and Finder fall back to their
+     own preview and icon.
+     */
+    static func isBinaryExecutable(_ url: URL) -> Bool {
+
+        guard (try? url.resourceValues(forKeys: [.contentTypeKey]).contentType?.identifier) == "public.unix-executable" else { return false }
+        guard let handle = try? FileHandle(forReadingFrom: url) else { return true }
+        defer { try? handle.close() }
+        return (try? handle.read(upToCount: 2)) != Data("#!".utf8)
     }
 
 

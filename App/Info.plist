@@ -57,6 +57,27 @@
 				</array>
 			</dict>
 		</dict>
+		<!-- LOCAL: IDL (Interactive Data Language) `.pro` files, which IDL itself
+		     claims by extension only, so macOS has no type for them -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.source-code</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>IDL Source</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>io.github.kehengzhu.idl-source</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pro</string>
+				</array>
+			</dict>
+		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>

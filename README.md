@@ -106,6 +106,7 @@ Markdown (`.md`, `.markdown`) and Jupyter notebooks (`.ipynb`), plus:
 - F# (`.fsharp`, `.f-sharp`, `.fsi`, `.fsx`, `.fsscript`)
 - Go (`.go`)
 - GameMaker Language (`.gml`)
+- IDL (`.pro`)
 - Haskell (`.haskell`, `.hs`, `.lhs`)
 - Java (`.java`)
 - JavaScript (`.js`)
@@ -134,6 +135,7 @@ Markdown (`.md`, `.markdown`) and Jupyter notebooks (`.ipynb`), plus:
 - Korn Shell (`.ksh`)
 - TCSH (`.tcsh`)
 - Z Shell (`.zsh`)
+- Executable scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line (Perl, Python, shell, Ruby and others)
 
 ### Assembly
 
@@ -150,7 +152,7 @@ Markdown (`.md`, `.markdown`) and Jupyter notebooks (`.ipynb`), plus:
 - Environment (`.env`)
 - Extensible Markup Platform (`.xmp`)
 - LaTex (`.latex`, `.tex`)
-- Makefiles (`makefile`)
+- Makefiles (`Makefile`, `GNUmakefile`, `Makefile.*`)
 - Apple Property list files (`.plist`)
 - Apple Entitlements files (`.entitlements`)
 - Apple Xcode NIB files (`.xib`)

@@ -66,6 +66,11 @@ class PreviewViewController: NSViewController,
 
         let start = Double(clock_gettime_nsec_np(CLOCK_UPTIME_RAW)) / 1e6
 
+        // LOCAL: leave compiled programs to the system previewer
+        if CodeRenderer.isBinaryExecutable(url) {
+            throw makeError(Constants.ERRORS.CODES.FILE_WONT_OPEN, "not a script")
+        }
+
         // Get the file contents as a string
         guard let data = try? Data(contentsOf: url, options: [.uncached]) else {
             throw makeError(Constants.ERRORS.CODES.FILE_WONT_OPEN)

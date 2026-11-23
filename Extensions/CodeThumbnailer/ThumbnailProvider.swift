@@ -34,6 +34,12 @@ class ThumbnailProvider: QLThumbnailProvider {
          * This is the main entry point for macOS' thumbnailing system
          */
 
+        // LOCAL: leave compiled programs to Finder's own icon
+        if CodeRenderer.isBinaryExecutable(request.fileURL) {
+            handler(nil, ThumbnailerError.badFileUnsupportedFile(request.fileURL.path))
+            return
+        }
+
         // Get the file contents as a string
         // FROM 2.3.0 - Only read in a minimal amount of data
         guard let codeFileHandle = try? FileHandle(forReadingFrom: request.fileURL) else {
