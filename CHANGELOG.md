@@ -1,5 +1,7 @@
 ## Quicklook Anything
 
+- 1.3.1 *24 November 2026*
+    - Preview JSON `.json` files, with highlighting.
 - 1.3.0 *23 November 2026*
     - Preview IDL `.pro` files, with highlighting for IDL syntax.
     - Preview scripts without an extension, such as `gitclone`, highlighted in the language of their `#!` line, and other text files without an extension as plain text; binary files keep the system preview.

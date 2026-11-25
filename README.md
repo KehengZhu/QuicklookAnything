@@ -150,6 +150,7 @@ Markdown (`.md`, `.markdown`) and Jupyter notebooks (`.ipynb`), plus:
 - CSS (`.css`)
 - DxO PhotoLab sidecar (`.dop`)
 - Environment (`.env`)
+- JSON (`.json`)
 - Extensible Markup Platform (`.xmp`)
 - LaTex (`.latex`, `.tex`)
 - Makefiles (`Makefile`, `GNUmakefile`, `Makefile.*`)

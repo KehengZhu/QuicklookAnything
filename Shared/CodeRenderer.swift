@@ -445,6 +445,8 @@ final internal class CodeRenderer {
         // Trap 'non-standard' UTIs
         if sourceFileUTI.hasPrefix("com.apple.applescript") { return "applescript" }
         if sourceFileUTI.hasSuffix("property-list") { return "xml" }
+        // LOCAL: JSON, whose UTI has no `-source` suffix for the rule below
+        if sourceFileUTI == "public.json" { return "json" }
         // Standard UTIs which contain strings we need to remove on other cases
         if sourceFileUTI == "public.script" { return "bash" }
         if sourceFileUTI == "public.css" { return "css" }
